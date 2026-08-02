@@ -1,0 +1,12 @@
+streamlit
+sentence-transformers
+groq
+faiss-cpu
+numpy
+PyMuPDF
+pytesseract
+Pillow
+audio-recorder-streamlit
+python-dotenv
+torch
+transformers

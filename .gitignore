@@ -1,0 +1,41 @@
+# Created by venv; see https://docs.python.org/3/library/venv.html
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual Environment
+venv/
+.env/
+env/
+
+# Environment Variables
+.env
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Streamlit
+.streamlit/secrets.toml
+
+# Saved Models / Indexes
+saved_index/
+*.faiss
+*.pkl
+
+# Uploaded files
+uploads/
+
+# Logs
+*.log
+
+# User uploaded documents
+data/
+uploads/
+
+*.exe
