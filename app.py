@@ -179,7 +179,7 @@ def generate_answer(query, client):
     broad = is_broad_question(query, client)
 
     if broad:
-        st.caption("🗂️ Using document summaries...")
+        st.caption("Using document summaries...")
         summary_context = ""
         for filename, summary in st.session_state.pdf_summaries.items():
             summary_context += f"\n\n=== {filename} ===\n{summary}"
@@ -209,9 +209,9 @@ Answer:"""
 
         answer = response.choices[0].message.content
         st.write(answer)
-        st.caption(f"📄 Sources: {', '.join(st.session_state.pdf_summaries.keys())}")
+        st.caption(f"Sources: {', '.join(st.session_state.pdf_summaries.keys())}")
 
-        with st.expander("🗂️ View document summaries used"):
+        with st.expander(" View document summaries used"):
             for filename, summary in st.session_state.pdf_summaries.items():
                 st.markdown(f"**{filename}**")
                 st.write(summary)
@@ -298,7 +298,7 @@ if "audio_transcribed" not in st.session_state:
 # ==========================================
 
 with st.sidebar:
-    st.header("📂 Upload Your PDFs")
+    st.header(" Upload Your PDFs")
 
     uploaded_files = st.file_uploader(
         "Upload one or more PDFs",
@@ -309,9 +309,9 @@ with st.sidebar:
     if uploaded_files:
         st.success(f"{len(uploaded_files)} file(s) uploaded")
         for f in uploaded_files:
-            st.write(f"📄 {f.name}")
+            st.write(f"{f.name}")
 
-    process_btn = st.button("⚙️ Process PDFs", type="primary")
+    process_btn = st.button("Process PDFs", type="primary")
 
     if process_btn and uploaded_files:
         with st.spinner("Reading and indexing PDFs..."):
@@ -324,10 +324,10 @@ with st.sidebar:
                 text = extract_text_from_pdf(pdf_file)
 
                 if len(text.strip()) < 50:
-                    st.warning(f"⚠️ Could not extract text from {pdf_file.name}")
+                    st.warning(f" Could not extract text from {pdf_file.name}")
                     continue
 
-                st.write(f"📝 Summarizing: {pdf_file.name}")
+                st.write(f" Summarizing: {pdf_file.name}")
                 summary = generate_pdf_summary(text, pdf_file.name, client)
                 pdf_summaries[pdf_file.name] = summary
 
@@ -336,7 +336,7 @@ with st.sidebar:
                     all_chunks.append(chunk)
                     all_sources.append(pdf_file.name)
 
-                st.write(f"✅ {pdf_file.name} — {len(chunks)} chunks")
+                st.write(f"{pdf_file.name} — {len(chunks)} chunks")
 
             if all_chunks:
                 embeddings = embedding_model.encode(
@@ -353,13 +353,13 @@ with st.sidebar:
                 st.session_state.pdfs_processed = True
                 st.session_state.messages = []
 
-                st.success("✅ All PDFs processed!")
+                st.success("All PDFs processed!")
                 st.write(f"Total chunks: {len(all_chunks)}")
 
                 st.divider()
-                st.subheader("📋 PDF Summaries")
+                st.subheader("PDF Summaries")
                 for filename, summary in pdf_summaries.items():
-                    with st.expander(f"📄 {filename}"):
+                    with st.expander(f"{filename}"):
                         st.write(summary)
             else:
                 st.error("No text could be extracted from any PDF.")
@@ -369,7 +369,7 @@ with st.sidebar:
 
     st.divider()
     if st.session_state.pdfs_processed:
-        st.success("✅ Index ready")
+        st.success("Index ready")
         st.write(f"Chunks in memory: {len(st.session_state.chunks)}")
         st.write(f"PDFs summarized: {len(st.session_state.pdf_summaries)}")
     else:
@@ -380,37 +380,37 @@ with st.sidebar:
 # WELCOME MESSAGE
 # ==========================================
 
-st.title("🤖 RAG Assistant")
+st.title(" RAG Assistant")
 
 if not st.session_state.pdfs_processed:
     st.markdown("""
-    👋 **Hello! I'm your RAG Assistant.**
+     **Hello! I'm your RAG Assistant.**
 
     I can help you understand any document instantly.
 
     **Here's how to get started:**
 
-    1. 📂 Upload your PDFs using the sidebar on the left
-    2. ⚙️ Click **Process PDFs** to index them
-    3. 💬 Type or 🎤 speak your question below
+    1. Upload your PDFs using the sidebar on the left
+    2. Click **Process PDFs** to index them
+    3. Type or speak your question below
 
     **What I can do:**
-    - 📋 Summarize entire documents
-    - 🔍 Answer specific questions
-    - 📊 Compare multiple documents
-    - 🔗 Tell you exactly which document the answer came from
+    - Summarize entire documents
+    - Answer specific questions
+    - Compare multiple documents
+    - Tell you exactly which document the answer came from
     """)
 
 else:
     # Show quick suggestions once PDFs are loaded
-    st.markdown("💡 **Try asking:**")
+    st.markdown("**Try asking:**")
     col1, col2 = st.columns(2)
     with col1:
-        st.info("📋 What are the main topics in these documents?")
-        st.info("🔍 What is [specific concept]?")
+        st.info("What are the main topics in these documents?")
+        st.info("What is [specific concept]?")
     with col2:
-        st.info("📊 Compare the two documents")
-        st.info("📌 Summarize the key findings")
+        st.info("Compare the two documents")
+        st.info(" Summarize the key findings")
 
 
 # ==========================================
@@ -427,7 +427,7 @@ for msg in st.session_state.messages:
 # ==========================================
 
 st.divider()
-st.markdown("🎤 **Or speak your question:**")
+st.markdown("**Or speak your question:**")
 
 audio_bytes = audio_recorder(
     text="Click to record",
@@ -440,7 +440,7 @@ if audio_bytes and len(audio_bytes) > 1000:
     with st.spinner("Transcribing..."):
         transcribed = transcribe_audio(audio_bytes, client)
     if transcribed and not transcribed.startswith("Error"):
-        st.success(f"🎤 You said: **{transcribed}**")
+        st.success(f"You said: **{transcribed}**")
         st.session_state.audio_transcribed = transcribed
 
 
@@ -457,7 +457,7 @@ if st.session_state.audio_transcribed and not query:
 if query:
 
     if not st.session_state.pdfs_processed:
-        st.warning("⚠️ Please upload and process PDFs first using the sidebar.")
+        st.warning("Please upload and process PDFs first using the sidebar.")
 
     else:
 
